@@ -86,4 +86,10 @@ class UserService(
     private fun findUserById(userId: Long): UserEntity =
         userRepository.findById(userId)
             .orElseThrow { UsernameNotFoundException("User not found") }
+
+    @Transactional
+    fun deleteUser(userId: Long) {
+        val user = findUserById(userId)
+        userRepository.delete(user)
+    }
 }

@@ -34,4 +34,11 @@ class UserController(
         userService.updateUser(request.toServiceDto(userId))
         return ResponseEntity.ok(HttpStatus.OK.reasonPhrase)
     }
+
+    @DeleteMapping("/users/{userId}")
+    @PreAuthorize(value = "hasRole('ADMIN') or #userId == authentication.principal.username")
+    fun deleteUser(@PathVariable userId: String): ResponseEntity<Void> {
+        userService.deleteUser(userId.toLong())
+        return ResponseEntity.noContent().build()
+    }
 }
