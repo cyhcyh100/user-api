@@ -1,16 +1,15 @@
 package kr.younghwan.userapi.domain.user.controller
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import kr.younghwan.userapi.config.SecurityConfig
 import kr.younghwan.userapi.domain.user.controller.dto.SigninRequest
 import kr.younghwan.userapi.domain.user.exception.InvalidCredentialsException
 import kr.younghwan.userapi.domain.user.service.UserService
 import kr.younghwan.userapi.domain.user.service.dto.SigninResponse
+import kr.younghwan.userapi.helper.BaseControllerTest
 import org.mockito.kotlin.any
 import org.mockito.kotlin.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
@@ -19,9 +18,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import kotlin.test.Test
 
-@Import(SecurityConfig::class)
 @WebMvcTest(SigninController::class)
-class SigninControllerTest {
+class SigninControllerTest : BaseControllerTest() {
 
     @Autowired
     lateinit var mockMvc: MockMvc
