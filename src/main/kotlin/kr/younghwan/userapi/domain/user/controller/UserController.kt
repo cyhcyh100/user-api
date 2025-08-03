@@ -5,6 +5,7 @@ import kr.younghwan.userapi.domain.user.controller.dto.UserUpdateRequest
 import kr.younghwan.userapi.domain.user.service.UserService
 import kr.younghwan.userapi.domain.user.service.dto.UserResponse
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -17,11 +18,8 @@ class UserController(
 
     @GetMapping("/users")
     @PreAuthorize(value = "hasRole('ADMIN')")
-    fun getUsers(
-        @RequestParam(defaultValue = "0") page: Int,
-        @RequestParam(defaultValue = "10") size: Int,
-    ): ResponseEntity<Page<UserResponse>> {
-        return ResponseEntity.ok(userService.getUsers(page, size))
+    fun getUsers(pageable: Pageable): ResponseEntity<Page<UserResponse>> {
+        return ResponseEntity.ok(userService.getUsers(pageable))
     }
 
     @GetMapping("/users/{userId}")

@@ -6,7 +6,7 @@ import kr.younghwan.userapi.domain.user.repository.UserRepository
 import kr.younghwan.userapi.domain.user.service.dto.*
 import kr.younghwan.userapi.global.jwt.JwtTokenProvider
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails
@@ -53,8 +53,7 @@ class UserService(
     }
 
     @Transactional(readOnly = true)
-    fun getUsers(page: Int, size: Int): Page<UserResponse> {
-        val pageable = PageRequest.of(page, size)
+    fun getUsers(pageable: Pageable): Page<UserResponse> {
         return userRepository.findAll(pageable).map { user ->
             UserResponse(
                 id = user.id,

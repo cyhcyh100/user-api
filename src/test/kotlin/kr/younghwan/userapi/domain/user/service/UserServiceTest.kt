@@ -130,7 +130,7 @@ class UserServiceTest {
         )
         whenever(userRepository.findAll(any<PageRequest>())).thenReturn(PageImpl(entities))
 
-        val result = userService.getUsers(0, 10)
+        val result = userService.getUsers(PageRequest.of(0, 10))
 
         result.content.size shouldBe 2
         result.content[0].id shouldBe 1L

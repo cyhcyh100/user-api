@@ -5,6 +5,7 @@ import kr.younghwan.userapi.domain.user.controller.dto.UserUpdateRequest
 import kr.younghwan.userapi.domain.user.service.UserService
 import kr.younghwan.userapi.domain.user.service.dto.UserResponse
 import kr.younghwan.userapi.helper.BaseControllerTest
+import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
@@ -34,7 +35,7 @@ class UserControllerTest : BaseControllerTest() {
             UserResponse(id = 1L, email = "test1@example.com", name = "user1"),
             UserResponse(id = 2L, email = "test2@example.com", name = "user2"),
         )
-        whenever(userService.getUsers(0, 10)).thenReturn(PageImpl(users))
+        whenever(userService.getUsers(any())).thenReturn(PageImpl(users))
 
         mockMvc.perform(get("/users").param("page", "0").param("size", "10"))
             .andExpect(status().isOk)
