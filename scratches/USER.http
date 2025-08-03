@@ -1,0 +1,9 @@
+### 회원 가입 API
+POST http://localhost:8080/signup
+Content-Type: application/json
+
+{
+  "email": "email@email.com",
+  "password": "password123",
+  "name": "Younghwan Choi"
+}
