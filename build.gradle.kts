@@ -19,6 +19,7 @@ repositories {
     mavenCentral()
 }
 
+val jjwtVersion = "0.12.6"
 val kotestVersion = "5.9.0"
 val mockitoKotlinVersion = "5.4.0"
 
@@ -29,8 +30,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("io.jsonwebtoken:jjwt-api:${jjwtVersion}")
 
     runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:${jjwtVersion}")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:${jjwtVersion}")
 
     testImplementation("io.kotest:kotest-runner-junit5:${kotestVersion}")
     testImplementation("org.mockito.kotlin:mockito-kotlin:${mockitoKotlinVersion}")
