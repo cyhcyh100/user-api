@@ -1,6 +1,7 @@
 package kr.younghwan.userapi.domain.user.service
 
 import kr.younghwan.userapi.domain.user.entity.UserEntity
+import kr.younghwan.userapi.domain.user.event.UserDeletionProducer
 import kr.younghwan.userapi.domain.user.exception.EmailAlreadyExistsException
 import kr.younghwan.userapi.domain.user.repository.UserRepository
 import kr.younghwan.userapi.domain.user.service.dto.*
@@ -20,6 +21,7 @@ class UserService(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
     private val jwtTokenProvider: JwtTokenProvider,
+    private val userDeletionProducer: UserDeletionProducer,
     private val authenticationManager: AuthenticationManager,
 ) {
 
@@ -91,5 +93,6 @@ class UserService(
     fun deleteUser(userId: Long) {
         val user = findUserById(userId)
         userRepository.delete(user)
+        userDeletionProducer.sendUserDeletedEvent(user.id)
     }
 }
