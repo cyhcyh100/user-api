@@ -13,6 +13,7 @@ data class SignupRequest(
     @field:NotBlank(message = "이름은 필수입니다.")
     val name: String?
 ) {
+    
     fun toServiceDto(): SignupDto {
         return SignupDto(
             email = email!!,
@@ -20,5 +21,4 @@ data class SignupRequest(
             name = name!!
         )
     }
-
 }

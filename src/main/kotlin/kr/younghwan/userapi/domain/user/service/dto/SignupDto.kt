@@ -4,6 +4,4 @@ data class SignupDto(
     val email: String,
     val password: String,
     val name: String
-) {
-
-}
+)
