@@ -61,3 +61,7 @@ docker compose -f docker/docker-compose.yml up -d
 ```
 ./gradlew test
 ```
+
+### API 문서
+
+- API.md 파일 참고
