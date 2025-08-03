@@ -10,6 +10,8 @@ import kr.younghwan.userapi.domain.user.service.dto.SignupDto
 import kr.younghwan.userapi.domain.user.service.dto.UserUpdateDto
 import kr.younghwan.userapi.global.jwt.JwtTokenProvider
 import org.mockito.kotlin.*
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -118,6 +120,29 @@ class UserServiceTest {
         }
 
         exception.message shouldBe "Bad credentials"
+    }
+
+    @Test
+    fun `getUsers should return paginated users`() {
+        val entities = listOf(
+            UserEntity(id = 1L, email = "user1@example.com", password = "password1", name = "user1"),
+            UserEntity(id = 2L, email = "user2@example.com", password = "password2", name = "user2"),
+        )
+        whenever(userRepository.findAll(any<PageRequest>())).thenReturn(PageImpl(entities))
+
+        val result = userService.getUsers(0, 10)
+
+        result.content.size shouldBe 2
+        result.content[0].id shouldBe 1L
+        result.content[0].email shouldBe "user1@example.com"
+        result.content[0].name shouldBe "user1"
+        result.content[1].id shouldBe 2L
+        result.content[1].email shouldBe "user2@example.com"
+        result.content[1].name shouldBe "user2"
+        result.totalElements shouldBe 2
+        result.totalPages shouldBe 1
+        result.size shouldBe 2
+        result.number shouldBe 0
     }
 
     @Test

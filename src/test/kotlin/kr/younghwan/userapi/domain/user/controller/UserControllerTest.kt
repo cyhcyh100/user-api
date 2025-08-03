@@ -8,6 +8,7 @@ import kr.younghwan.userapi.helper.BaseControllerTest
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.data.domain.PageImpl
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.bean.override.mockito.MockitoBean
@@ -25,6 +26,33 @@ class UserControllerTest : BaseControllerTest() {
 
     @MockitoBean
     private lateinit var userService: UserService
+
+    @Test
+    @WithMockUser(username = "999", roles = ["ADMIN"])
+    fun `GET user list`() {
+        val users = listOf(
+            UserResponse(id = 1L, email = "test1@example.com", name = "user1"),
+            UserResponse(id = 2L, email = "test2@example.com", name = "user2"),
+        )
+        whenever(userService.getUsers(0, 10)).thenReturn(PageImpl(users))
+
+        mockMvc.perform(get("/users").param("page", "0").param("size", "10"))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.content.length()").value(2))
+            .andExpect(jsonPath("$.content[0].id").value(1L))
+            .andExpect(jsonPath("$.content[0].email").value("test1@example.com"))
+            .andExpect(jsonPath("$.content[0].name").value("user1"))
+            .andExpect(jsonPath("$.content[1].id").value(2L))
+            .andExpect(jsonPath("$.content[1].email").value("test2@example.com"))
+            .andExpect(jsonPath("$.content[1].name").value("user2"))
+    }
+
+    @Test
+    @WithMockUser(username = "1", roles = ["MEMBER"])
+    fun `GET user list - member forbidden`() {
+        mockMvc.perform(get("/users"))
+            .andExpect(status().isForbidden)
+    }
 
     @Test
     @WithMockUser(username = "1", roles = ["MEMBER"])
