@@ -3,6 +3,7 @@ package kr.younghwan.userapi.domain.user.service
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import kr.younghwan.userapi.domain.user.entity.UserEntity
+import kr.younghwan.userapi.domain.user.event.UserDeletionProducer
 import kr.younghwan.userapi.domain.user.exception.EmailAlreadyExistsException
 import kr.younghwan.userapi.domain.user.repository.UserRepository
 import kr.younghwan.userapi.domain.user.service.dto.SigninDto
@@ -27,8 +28,9 @@ class UserServiceTest {
     private val userRepository: UserRepository = mock()
     private val passwordEncoder: PasswordEncoder = mock()
     private val jwtTokenProvider: JwtTokenProvider = mock()
+    private val userDeletionProducer: UserDeletionProducer = mock()
     private val authenticationManager: AuthenticationManager = mock()
-    private val userService = UserService(userRepository, passwordEncoder, jwtTokenProvider, authenticationManager)
+    private val userService = UserService(userRepository, passwordEncoder, jwtTokenProvider, userDeletionProducer, authenticationManager)
 
     @Test
     fun `signup should create a user when email does not exist`() {
@@ -215,6 +217,7 @@ class UserServiceTest {
         userService.deleteUser(1L)
 
         verify(userRepository).delete(userEntity)
+        verify(userDeletionProducer).sendUserDeletedEvent(1L)
     }
 
     @Test
