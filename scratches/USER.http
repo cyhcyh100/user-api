@@ -43,3 +43,8 @@ Content-Type: application/json
 ### 사용자 정보 리스트 조회 API ( Admin 전용 )
 GET http://localhost:8080/users
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3NTQyMjUzMjgsImV4cCI6MTc1NDIzMjUyOH0._UZ_EFAmX6-vQoHfsBJsGAoJgT9nrl7RvtUgEtiYFOZ7DbqA4bQSR0bG0uRFaD40iDAX1h86n3hzT0fj01gjmg
+
+### 사용자 삭제 API
+DELETE http://localhost:8080/users/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9NRU1CRVIiXSwiaWF0IjoxNzU0MjI5MzY4LCJleHAiOjE3NTQyMzY1Njh9.HeFZfl87VPjulV6m1T2DcB_BatRc0T04skSo1IOQaRXt1RYsOrskRPse6b3fYg6fSEjGIq4JtsAIZXbYOsn0hQ
+

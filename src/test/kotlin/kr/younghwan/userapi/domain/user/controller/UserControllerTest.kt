@@ -14,8 +14,7 @@ import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import kotlin.test.Test
 
@@ -138,5 +137,33 @@ class UserControllerTest : BaseControllerTest() {
         )
             .andExpect(status().isOk)
             .andExpect(content().string("OK"))
+    }
+
+
+    @Test
+    @WithMockUser(username = "1", roles = ["MEMBER"])
+    fun `DELETE users`() {
+        val userId = "1"
+
+        mockMvc.perform(delete("/users/$userId"))
+            .andExpect(status().isNoContent)
+    }
+
+    @Test
+    @WithMockUser(username = "2", roles = ["MEMBER"])
+    fun `DELETE users - member can NOT delete other user`() {
+        val userId = "1"
+
+        mockMvc.perform(delete("/users/$userId"))
+            .andExpect(status().isForbidden)
+    }
+
+    @Test
+    @WithMockUser(username = "999", roles = ["ADMIN"])
+    fun `DELETE users - admin can delete any user`() {
+        val userId = "123"
+
+        mockMvc.perform(delete("/users/$userId"))
+            .andExpect(status().isNoContent)
     }
 }

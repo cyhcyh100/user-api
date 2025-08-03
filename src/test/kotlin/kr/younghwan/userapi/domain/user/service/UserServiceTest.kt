@@ -200,4 +200,31 @@ class UserServiceTest {
         userEntity.email shouldBe "test2@example.com"
         userEntity.name shouldBe "변경된 유저"
     }
+
+    @Test
+    fun `deleteUser should remove user`() {
+        val userEntity = UserEntity(
+            id = 1L,
+            email = "test@example.com",
+            password = "encodedPassword",
+            name = "홍길동",
+        )
+
+        whenever(userRepository.findById(1L)).thenReturn(Optional.of(userEntity))
+
+        userService.deleteUser(1L)
+
+        verify(userRepository).delete(userEntity)
+    }
+
+    @Test
+    fun `deleteUser should throw exception when user not found`() {
+        whenever(userRepository.findById(999L)).thenReturn(Optional.empty())
+
+        val exception = assertFailsWith<UsernameNotFoundException> {
+            userService.deleteUser(999L)
+        }
+
+        exception.message shouldBe "User not found"
+    }
 }
