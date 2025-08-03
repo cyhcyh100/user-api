@@ -3,10 +3,7 @@ package kr.younghwan.userapi.domain.user.service
 import kr.younghwan.userapi.domain.user.entity.UserEntity
 import kr.younghwan.userapi.domain.user.exception.EmailAlreadyExistsException
 import kr.younghwan.userapi.domain.user.repository.UserRepository
-import kr.younghwan.userapi.domain.user.service.dto.SigninDto
-import kr.younghwan.userapi.domain.user.service.dto.SigninResponse
-import kr.younghwan.userapi.domain.user.service.dto.SignupDto
-import kr.younghwan.userapi.domain.user.service.dto.UserResponse
+import kr.younghwan.userapi.domain.user.service.dto.*
 import kr.younghwan.userapi.global.jwt.JwtTokenProvider
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -55,8 +52,7 @@ class UserService(
 
     @Transactional(readOnly = true)
     fun getUser(userId: Long): UserResponse {
-        val user = userRepository.findById(userId)
-            .orElseThrow { UsernameNotFoundException("User not found") }
+        val user = findUserById(userId)
 
         return UserResponse(
             id = user.id,
@@ -64,4 +60,17 @@ class UserService(
             name = user.name,
         )
     }
+
+    @Transactional
+    fun updateUser(dto: UserUpdateDto) {
+        findUserById(dto.userId)
+            .apply {
+                dto.email?.let { email = it }
+                dto.name?.let { name = it }
+            }
+    }
+
+    private fun findUserById(userId: Long): UserEntity =
+        userRepository.findById(userId)
+            .orElseThrow { UsernameNotFoundException("User not found") }
 }

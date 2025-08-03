@@ -1,22 +1,29 @@
 package kr.younghwan.userapi.domain.user.controller
 
+import jakarta.validation.Valid
+import kr.younghwan.userapi.domain.user.controller.dto.UserUpdateRequest
 import kr.younghwan.userapi.domain.user.service.UserService
 import kr.younghwan.userapi.domain.user.service.dto.UserResponse
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class UserController(
     private val userService: UserService,
 ) {
+
     @GetMapping("/users/{userId}")
     @PreAuthorize(value = "hasRole('ADMIN') or #userId == authentication.principal.username")
-    fun getUser(
-        @PathVariable userId: String,
-    ): ResponseEntity<UserResponse> {
+    fun getUser(@PathVariable userId: String): ResponseEntity<UserResponse> {
         return ResponseEntity.ok(userService.getUser(userId.toLong()))
+    }
+
+    @PutMapping("/users/{userId}")
+    @PreAuthorize(value = "hasRole('ADMIN') or #userId == authentication.principal.username")
+    fun updateUser(@PathVariable userId: String, @Valid @RequestBody request: UserUpdateRequest): ResponseEntity<String> {
+        userService.updateUser(request.toServiceDto(userId))
+        return ResponseEntity.ok(HttpStatus.OK.reasonPhrase)
     }
 }

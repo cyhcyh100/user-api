@@ -7,6 +7,7 @@ import kr.younghwan.userapi.domain.user.exception.EmailAlreadyExistsException
 import kr.younghwan.userapi.domain.user.repository.UserRepository
 import kr.younghwan.userapi.domain.user.service.dto.SigninDto
 import kr.younghwan.userapi.domain.user.service.dto.SignupDto
+import kr.younghwan.userapi.domain.user.service.dto.UserUpdateDto
 import kr.younghwan.userapi.global.jwt.JwtTokenProvider
 import org.mockito.kotlin.*
 import org.springframework.security.authentication.AuthenticationManager
@@ -153,5 +154,25 @@ class UserServiceTest {
         }
 
         exception.message shouldBe "User not found"
+    }
+
+    @Test
+    fun `updateUser should update user's email and name`() {
+        // given
+        val userEntity = UserEntity(
+            id = 1L,
+            email = "test@example.com",
+            password = "encodedPassword",
+            name = "홍길동"
+        )
+
+        whenever(userRepository.findById(1L)).thenReturn(Optional.of(userEntity))
+
+        // when
+        userService.updateUser(UserUpdateDto(1L, "test2@example.com", "변경된 유저"))
+
+        // then
+        userEntity.email shouldBe "test2@example.com"
+        userEntity.name shouldBe "변경된 유저"
     }
 }

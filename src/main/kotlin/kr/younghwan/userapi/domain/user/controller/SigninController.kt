@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 class SigninController(
     private val userService: UserService
 ) {
+
     @PostMapping("/signin")
     fun signin(@Valid @RequestBody request: SigninRequest): ResponseEntity<SigninResponse> =
         ResponseEntity.ok(userService.signin(request.toServiceDto()))

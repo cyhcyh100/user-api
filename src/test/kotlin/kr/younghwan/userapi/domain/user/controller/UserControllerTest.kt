@@ -1,17 +1,20 @@
 package kr.younghwan.userapi.domain.user.controller
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import kr.younghwan.userapi.domain.user.controller.dto.UserUpdateRequest
 import kr.younghwan.userapi.domain.user.service.UserService
 import kr.younghwan.userapi.domain.user.service.dto.UserResponse
 import kr.younghwan.userapi.helper.BaseControllerTest
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import kotlin.test.Test
 
 @WebMvcTest(UserController::class)
@@ -62,5 +65,49 @@ class UserControllerTest : BaseControllerTest() {
             .andExpect(jsonPath("$.id").value(123L))
             .andExpect(jsonPath("$.email").value("admin@example.com"))
             .andExpect(jsonPath("$.name").value("관리자"))
+    }
+
+    @Test
+    @WithMockUser(username = "1", roles = ["MEMBER"])
+    fun `PUT users`() {
+        val userId = "1"
+        val request = UserUpdateRequest(email = "test2@example.com", name = "변경된 유저")
+
+        mockMvc.perform(
+            put("/users/$userId")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jacksonObjectMapper().writeValueAsString(request))
+        )
+            .andExpect(status().isOk)
+            .andExpect(content().string("OK"))
+    }
+
+    @Test
+    @WithMockUser(username = "2", roles = ["MEMBER"])
+    fun `PUT users - member can NOT update other user`() {
+        val userId = "1"
+        val request = UserUpdateRequest(name = "변경된 유저")
+
+        mockMvc.perform(
+            put("/users/$userId")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jacksonObjectMapper().writeValueAsString(request))
+        )
+            .andExpect(status().isForbidden)
+    }
+
+    @Test
+    @WithMockUser(username = "999", roles = ["ADMIN"])
+    fun `PUT users - admin can update any user`() {
+        val userId = "123"
+        val request = UserUpdateRequest(name = "관리자가 수정")
+
+        mockMvc.perform(
+            put("/users/$userId")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jacksonObjectMapper().writeValueAsString(request))
+        )
+            .andExpect(status().isOk)
+            .andExpect(content().string("OK"))
     }
 }
