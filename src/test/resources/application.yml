@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+jwt:
+  secret: fef68ee79a5e32ad0b5f82e5cdbb255b30d127a473258e3f5c0322c094052a684da0f34f8d28044d84c7e2ceb5593678df19689946adeab5acc5d3079dd26b0a
+  access-token-expiration-hour: 2
+  refresh-token-expiration-hour: 24
