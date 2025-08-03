@@ -19,4 +19,14 @@ Content-Type: application/json
 
 ### 사용자 정보 조회 API
 GET http://localhost:8080/users/1
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9NRU1CRVIiXSwiaWF0IjoxNzU0MjE1Mzk2LCJleHAiOjE3NTQyMjI1OTZ9.FcnxhYloqik8GHFOL9jepKHSKe0Ps9tuMlbWnQVzv7FEVCp2ndEEGvsiyE4NTKaXtM7FITEfXQ0qWpus-xhcUg
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9NRU1CRVIiXSwiaWF0IjoxNzU0MjIyODgyLCJleHAiOjE3NTQyMzAwODJ9.C5BP9p8ds_5r5gD6_VZLxImSesubK9I77Fr5oTB0FGlz-K5A6mWP7uyfJHP238ngZg9wWg-_ncwg-Rs-En-MZA
+
+### 사용자 정보 수정 API
+PUT http://localhost:8080/users/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9NRU1CRVIiXSwiaWF0IjoxNzU0MjIyODgyLCJleHAiOjE3NTQyMzAwODJ9.C5BP9p8ds_5r5gD6_VZLxImSesubK9I77Fr5oTB0FGlz-K5A6mWP7uyfJHP238ngZg9wWg-_ncwg-Rs-En-MZA
+Content-Type: application/json
+
+{
+  "email": "email@email2.com",
+  "name": "name2"
+}
