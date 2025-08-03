@@ -1,6 +1,8 @@
 package kr.younghwan.userapi.global.jwt
 
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import java.util.*
 import kotlin.test.Test
 
 class JwtTokenProviderTest {
@@ -20,10 +22,28 @@ class JwtTokenProviderTest {
 
         // when
         val (accessToken, refreshToken) = jwtTokenProvider.createToken(username, roles)
+        jwtTokenProvider.validate(accessToken) shouldBe true
+        val claims = jwtTokenProvider.parseClaims(accessToken)
 
         // then
-        accessToken shouldNotBe null
-        refreshToken shouldNotBe null
         accessToken shouldNotBe refreshToken
+        claims.subject shouldBe "test@example.com"
+        claims["roles"] shouldBe listOf("ROLE_MEMBER")
+    }
+
+    @Test
+    fun `Expired token should return false in validate`() {
+        // given
+        val expiredToken = io.jsonwebtoken.Jwts.builder()
+            .subject("42")
+            .expiration(Date(System.currentTimeMillis() - 1000))
+            .signWith(io.jsonwebtoken.security.Keys.hmacShaKeyFor(secret.toByteArray()))
+            .compact()
+
+        // when
+        val isValid = jwtTokenProvider.validate(expiredToken)
+
+        // then
+        isValid shouldBe false
     }
 }

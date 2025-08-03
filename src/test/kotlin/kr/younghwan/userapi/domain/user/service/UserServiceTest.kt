@@ -14,7 +14,9 @@ import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
+import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
@@ -115,5 +117,41 @@ class UserServiceTest {
         }
 
         exception.message shouldBe "Bad credentials"
+    }
+
+    @Test
+    fun `getUser should return user info`() {
+        // given
+        whenever(userRepository.findById(1L)).thenReturn(
+            Optional.of(
+                UserEntity(
+                    id = 1L,
+                    email = "test@example.com",
+                    password = "encodedPassword",
+                    name = "홍길동"
+                )
+            )
+        )
+
+        // when
+        val userResponse = userService.getUser(1L)
+
+        // then
+        userResponse.id shouldBe 1L
+        userResponse.email shouldBe "test@example.com"
+        userResponse.name shouldBe "홍길동"
+    }
+
+    @Test
+    fun `getUser should throw exception when user not found`() {
+        // given
+        whenever(userRepository.findById(999L)).thenReturn(Optional.empty())
+
+        // when & then
+        val exception = assertFailsWith<UsernameNotFoundException> {
+            userService.getUser(999L)
+        }
+
+        exception.message shouldBe "User not found"
     }
 }

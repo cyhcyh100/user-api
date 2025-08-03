@@ -16,3 +16,7 @@ Content-Type: application/json
   "email": "email@email.com",
   "password": "password123"
 }
+
+### 사용자 정보 조회 API
+GET http://localhost:8080/users/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9NRU1CRVIiXSwiaWF0IjoxNzU0MjE1Mzk2LCJleHAiOjE3NTQyMjI1OTZ9.FcnxhYloqik8GHFOL9jepKHSKe0Ps9tuMlbWnQVzv7FEVCp2ndEEGvsiyE4NTKaXtM7FITEfXQ0qWpus-xhcUg
