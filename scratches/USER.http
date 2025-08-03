@@ -17,6 +17,15 @@ Content-Type: application/json
   "password": "password123"
 }
 
+### 로그인 API (ADMIN)
+POST http://localhost:8080/signin
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "password"
+}
+
 ### 사용자 정보 조회 API
 GET http://localhost:8080/users/1
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9NRU1CRVIiXSwiaWF0IjoxNzU0MjIyODgyLCJleHAiOjE3NTQyMzAwODJ9.C5BP9p8ds_5r5gD6_VZLxImSesubK9I77Fr5oTB0FGlz-K5A6mWP7uyfJHP238ngZg9wWg-_ncwg-Rs-En-MZA
@@ -30,3 +39,7 @@ Content-Type: application/json
   "email": "email@email2.com",
   "name": "name2"
 }
+
+### 사용자 정보 리스트 조회 API ( Admin 전용 )
+GET http://localhost:8080/users
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicm9sZXMiOlsiUk9MRV9BRE1JTiJdLCJpYXQiOjE3NTQyMjUzMjgsImV4cCI6MTc1NDIzMjUyOH0._UZ_EFAmX6-vQoHfsBJsGAoJgT9nrl7RvtUgEtiYFOZ7DbqA4bQSR0bG0uRFaD40iDAX1h86n3hzT0fj01gjmg

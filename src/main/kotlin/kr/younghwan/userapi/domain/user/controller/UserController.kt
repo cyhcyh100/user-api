@@ -4,6 +4,8 @@ import jakarta.validation.Valid
 import kr.younghwan.userapi.domain.user.controller.dto.UserUpdateRequest
 import kr.younghwan.userapi.domain.user.service.UserService
 import kr.younghwan.userapi.domain.user.service.dto.UserResponse
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
@@ -13,6 +15,12 @@ import org.springframework.web.bind.annotation.*
 class UserController(
     private val userService: UserService,
 ) {
+
+    @GetMapping("/users")
+    @PreAuthorize(value = "hasRole('ADMIN')")
+    fun getUsers(pageable: Pageable): ResponseEntity<Page<UserResponse>> {
+        return ResponseEntity.ok(userService.getUsers(pageable))
+    }
 
     @GetMapping("/users/{userId}")
     @PreAuthorize(value = "hasRole('ADMIN') or #userId == authentication.principal.username")

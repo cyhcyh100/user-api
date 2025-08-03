@@ -5,6 +5,8 @@ import kr.younghwan.userapi.domain.user.exception.EmailAlreadyExistsException
 import kr.younghwan.userapi.domain.user.repository.UserRepository
 import kr.younghwan.userapi.domain.user.service.dto.*
 import kr.younghwan.userapi.global.jwt.JwtTokenProvider
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetails
@@ -48,6 +50,17 @@ class UserService(
             accessToken = accessToken,
             refreshToken = refreshToken
         )
+    }
+
+    @Transactional(readOnly = true)
+    fun getUsers(pageable: Pageable): Page<UserResponse> {
+        return userRepository.findAll(pageable).map { user ->
+            UserResponse(
+                id = user.id,
+                email = user.email,
+                name = user.name,
+            )
+        }
     }
 
     @Transactional(readOnly = true)
